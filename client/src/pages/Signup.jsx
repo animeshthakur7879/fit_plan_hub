@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signup, clearError } from "../redux/authSlice";
 import { Dumbbell, Mail, Lock, Eye, EyeOff, User, AlertCircle } from "lucide-react";
+import { register } from "../redux/auth/mauthSlice";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -33,7 +34,8 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(signup(formData));
+    // dispatch(signup(formData));
+    dispatch(register(formData))
   };
 
   return (

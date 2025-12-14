@@ -5,9 +5,14 @@ const colors = require('colors');
 const connectDB = require('./db_config/db_config');
 const errorHandler = require('./Middlewares/errorHandler');
 const port = process.env.PORT || 3000;
+const cors = require('cors');
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
 
 connectDB();
 
