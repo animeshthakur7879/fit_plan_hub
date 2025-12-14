@@ -22,6 +22,10 @@ const planSchema = new mongoose.Schema(
       type: Number, // days
       required: true,
     },
+    imgUrl: {
+      type: String,
+      // required: true, 
+    },
 
     trainer: {
       type: mongoose.Schema.Types.ObjectId,

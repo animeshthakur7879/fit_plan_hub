@@ -1,11 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../redux/authSlice";
+// import { logout } from "../redux/mauthSlice";
+import { logout } from "../redux/auth/mauthSlice";
 import { Dumbbell, User, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const Navbar = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { muser } = useSelector((state) => state.mauth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,7 +16,7 @@ const Navbar = () => {
     navigate("/");
   };
 
-  const navLinks = user?.role === "trainer" 
+  const navLinks = muser?.role === "trainer" 
     ? [
         { to: "/plans", label: "All Plans" },
         { to: "/trainer/dashboard", label: "My Dashboard" },
@@ -42,7 +43,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            {user && navLinks.map((link) => (
+            {muser && navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
@@ -55,13 +56,13 @@ const Navbar = () => {
 
           {/* Auth Section */}
           <div className="hidden md:flex items-center gap-4">
-            {user ? (
+            {muser ? (
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted">
                   <User className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium">{user.name}</span>
+                  <span className="text-sm font-medium">{muser.name}</span>
                   <span className="text-xs px-2 py-0.5 rounded-full bg-primary text-primary-foreground capitalize">
-                    {user.role}
+                    {muser.role}
                   </span>
                 </div>
                 <button
@@ -103,7 +104,7 @@ const Navbar = () => {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-border animate-fade-in">
             <div className="flex flex-col gap-2">
-              {user && navLinks.map((link) => (
+              {muser && navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
@@ -113,7 +114,7 @@ const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
-              {user ? (
+              {muser ? (
                 <button
                   onClick={() => {
                     handleLogout();

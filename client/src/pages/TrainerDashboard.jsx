@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPlans, createPlan, updatePlan, deletePlan } from "../redux/planSlice";
 import Navbar from "../components/Navbar";
 import { Plus, Edit2, Trash2, X, DollarSign, Clock, FileText } from "lucide-react";
+import { showMyPlans , addPlan } from "../redux/plan/mplanSlice";
 
 const TrainerDashboard = () => {
   const dispatch = useDispatch();
   const { plans, isLoading } = useSelector((state) => state.plans);
-  const { user } = useSelector((state) => state.auth);
+  const { muser } = useSelector((state) => state.mauth);
+  // console.log(muser)
   
   const [showModal, setShowModal] = useState(false);
   const [editingPlan, setEditingPlan] = useState(null);
@@ -16,14 +18,15 @@ const TrainerDashboard = () => {
     description: "",
     price: "",
     duration: "",
+    imgUrl: "",
   });
 
   useEffect(() => {
-    dispatch(fetchPlans());
-  }, [dispatch]);
+    dispatch(showMyPlans())
+  }, []);
 
   // Filter plans by current trainer
-  const myPlans = plans.filter((p) => p.trainerId === user?.id);
+  const myPlans = plans.filter((p) => p.trainerId === muser?.id);
 
   const handleOpenModal = (plan = null) => {
     if (plan) {
@@ -33,10 +36,11 @@ const TrainerDashboard = () => {
         description: plan.description,
         price: plan.price.toString(),
         duration: plan.duration.toString(),
+        imgUrl: plan.image || "",
       });
     } else {
       setEditingPlan(null);
-      setFormData({ title: "", description: "", price: "", duration: "" });
+      setFormData({ title: "", description: "", price: "", duration: "", imgUrl: "" });
     }
     setShowModal(true);
   };
@@ -44,27 +48,24 @@ const TrainerDashboard = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingPlan(null);
-    setFormData({ title: "", description: "", price: "", duration: "" });
+    setFormData({ title: "", description: "", price: "", duration: "", imgUrl: "" });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const planData = {
       ...formData,
-      price: parseFloat(formData.price),
-      duration: parseInt(formData.duration),
-      trainerId: user.id,
-      trainerName: user.name,
-      image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=250&fit=crop",
-      category: "Custom",
-      difficulty: "Intermediate",
-      exercises: ["Custom workout 1", "Custom workout 2", "Custom workout 3"],
+      trainer: muser.id,
     };
+
+    console.log(planData)
+
+    // console.log(planData)
 
     if (editingPlan) {
       await dispatch(updatePlan({ id: editingPlan.id, planData }));
     } else {
-      await dispatch(createPlan(planData));
+      await dispatch(addPlan(planData))
     }
     handleCloseModal();
   };
@@ -226,6 +227,17 @@ const TrainerDashboard = () => {
                   required
                   rows={4}
                   className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Image URL</label>
+                <input
+                  type="url"
+                  value={formData.imgUrl}
+                  onChange={(e) => setFormData({ ...formData, imgUrl: e.target.value })}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                 />
               </div>
 

@@ -16,13 +16,14 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   const dispatch = useDispatch();
-  const { token, user } = useSelector((state) => state.auth);
+  // const { muser } = useSelector((state) => state.auth);
+  const {muser} = useSelector((state) => state.mauth);
 
-  useEffect(() => {
-    if (token && !user) {
-      dispatch(fetchCurrentUser());
-    }
-  }, [dispatch, token, user]);
+  // useEffect(() => {
+  //   if (token && !user) {
+  //     dispatch(fetchCurrentUser());
+  //   }
+  // }, [dispatch, token, user]);
 
   return (
     <BrowserRouter>

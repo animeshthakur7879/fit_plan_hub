@@ -2,7 +2,8 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
-  const { user, token, isLoading } = useSelector((state) => state.auth);
+  // const { user, token, isLoading } = useSelector((state) => state.auth);
+  const { muser, isLoading } = useSelector((state) => state.mauth);
 
   if (isLoading) {
     return (
@@ -12,11 +13,11 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     );
   }
 
-  if (!token || !user) {
+  if ( !muser) {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
+  if (allowedRoles.length > 0 && !allowedRoles.includes(muser.role)) {
     return <Navigate to="/" replace />;
   }
 

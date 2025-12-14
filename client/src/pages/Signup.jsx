@@ -18,11 +18,13 @@ const Signup = () => {
   const navigate = useNavigate();
   const { isLoading, error, user } = useSelector((state) => state.auth);
 
+  const { muser } = useSelector((state) => state.mauth);
+
   useEffect(() => {
-    if (user) {
+    if (muser) {
       navigate(user.role === "trainer" ? "/trainer/dashboard" : "/feed");
     }
-  }, [user, navigate]);
+  }, [muser, navigate]);
 
   useEffect(() => {
     dispatch(clearError());

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login, clearError } from "../redux/authSlice";
 import { Dumbbell, Mail, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { loginUser } from "../redux/auth/mauthSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,12 +13,13 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLoading, error, user } = useSelector((state) => state.auth);
+  const { muser } = useSelector((state) => state.mauth);
 
   useEffect(() => {
-    if (user) {
-      navigate(user.role === "trainer" ? "/trainer/dashboard" : "/feed");
+    if (muser) {
+      navigate(muser.role === "trainer" ? "/trainer/dashboard" : "/feed");
     }
-  }, [user, navigate]);
+  }, [muser, navigate]);
 
   useEffect(() => {
     dispatch(clearError());
@@ -25,7 +27,9 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login({ email, password }));
+    const formData = { email, password };
+    // dispatch(login({ email, password }));
+    dispatch(loginUser(formData));
   };
 
   return (
