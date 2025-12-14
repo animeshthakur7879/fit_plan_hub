@@ -19,6 +19,8 @@ app.use('/api/auth', require('./routes/auth/authRoutes'));
 
 app.use('/api/plans' , require('./routes/trainer/trainerRoutes'));
 
+app.use('/api/user' , require('./routes/userRoutes/userRoutes'));
+
 app.use(errorHandler)
 
 app.listen(port, () => {
